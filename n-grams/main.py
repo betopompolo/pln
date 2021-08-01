@@ -1,7 +1,7 @@
-from dataset_parser import extract_from_tag
+from dataset_parser import remove_punctuation
 
 if __name__ == '__main__':
-    sentence = 'this is the real text</text> a foo bar sentences and i want to ngramize it'
-    result = extract_from_tag(sentence, 'text')
+    sentence = 'esse é um texto escrito em português. será que é possível remover a pontuacão dessa sentença?'
+    result = remove_punctuation(sentence)
     print(result)
 
