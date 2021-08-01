@@ -1,8 +1,7 @@
-from n_grams import n_gram
+from dataset_parser import extract_from_tag
 
 if __name__ == '__main__':
-    sentence = 'this is a foo bar sentences and i want to ngramize it'
-    ngram = n_gram(sentence, 5)
+    sentence = 'this is the real text</text> a foo bar sentences and i want to ngramize it'
+    result = extract_from_tag(sentence, 'text')
+    print(result)
 
-    for i in ngram:
-        print(i)
