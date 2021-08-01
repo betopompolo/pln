@@ -1,16 +1,8 @@
-# This is a sample Python script.
+from n_grams import n_gram
 
-# Press ⌃F5 to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press F9 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    sentence = 'this is a foo bar sentences and i want to ngramize it'
+    ngram = n_gram(sentence, 5)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    for i in ngram:
+        print(i)
