@@ -1,7 +1,5 @@
-from dataset_parser import remove_punctuation
+from dataset_parser import load_dataset
 
 if __name__ == '__main__':
-    sentence = 'esse é um texto escrito em português. será que é possível remover a pontuacão dessa sentença?'
-    result = remove_punctuation(sentence)
-    print(result)
-
+    dataset = load_dataset('folha94')
+    print('done :D')
