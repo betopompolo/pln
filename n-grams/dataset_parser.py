@@ -23,3 +23,7 @@ def extract_from_tag(text: str, tag: str) -> Optional[str]:
 def remove_punctuation(text: str) -> Optional[str]:
     result = re.sub(r'[^\w\s]', '', text)
     return "".join(result)
+
+
+def remove_linebreak(text: str) -> str:
+    return text.replace('\n', ' ').strip()
