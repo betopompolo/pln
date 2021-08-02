@@ -1,27 +1,28 @@
 import functools
 import operator
 
-Vocabulary = dict[str, int]
+NGram = zip
+NGramCount = dict[NGram, int]
 
 
-def n_gram(text: str, n: int) -> zip:
+def n_gram(text: str, n: int) -> NGram:
     split = text.split()
     grams = [split[i:] for i in range(n)]
     return zip(*grams)
 
 
-def get_vocabulary(text: str) -> Vocabulary:
-    vocabulary = {}
-    for word in text.split():
-        if vocabulary.get(word) is None:
-            vocabulary[word] = 1
+def count(ngram: NGram) -> NGramCount:
+    ngram_count = {}
+    for data in ngram:
+        if data in ngram_count:
+            ngram_count[data] += 1
         else:
-            vocabulary[word] += 1
+            ngram_count[data] = 1
 
-    return vocabulary
+    return ngram_count
 
 
-def sum_vocabularies(v1: Vocabulary, v2: Vocabulary) -> Vocabulary:
+def sum_count(v1: NGramCount, v2: NGramCount) -> NGramCount:
     result = v1.copy()
 
     for key in v2.keys():
@@ -33,5 +34,7 @@ def sum_vocabularies(v1: Vocabulary, v2: Vocabulary) -> Vocabulary:
     return result
 
 
-def word_count(v: Vocabulary) -> int:
-    return functools.reduce(operator.add, v.values())
+def word_count(ngram_count: NGramCount) -> int:
+    if any(len(list(key)) != 1 for key in ngram_count.keys()):
+        raise AttributeError('word_count accepts unigrams only')
+    return functools.reduce(operator.add, ngram_count.values())

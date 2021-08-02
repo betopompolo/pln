@@ -23,9 +23,9 @@ def extract_from_tag(text: str, tag: str) -> Optional[str]:
     [start_tag, end_tag] = [f'<{tag}>', f'<\/{tag}>']
     tag_regex = f'{start_tag}([\s\S][\w\W][\d\D]*?){end_tag}'
 
-    search_result = re.search(tag_regex, text)
-    if search_result:
-        return search_result.group(1).replace(start_tag, '').replace(end_tag, '')
+    search_results = re.findall(tag_regex, text)
+    if len(search_results) > 0:
+        return "".join([s.replace(start_tag, '').replace(end_tag, '') for s in search_results])
 
 
 def tag_sentences(text: str) -> str:
@@ -37,3 +37,7 @@ def tag_sentences(text: str) -> str:
 
 def remove_linebreak(text: str) -> str:
     return text.replace('\n', ' ').strip()
+
+
+def remove_symbols(text: str) -> str:
+    return text.replace(',', '').replace(';', '')
