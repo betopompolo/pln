@@ -4,14 +4,11 @@ from typing import Optional, List
 
 
 def load_dataset(dataset_name: str) -> List[str]:
-    dataset = []
     dataset_path = f'dataset/{dataset_name}'
 
     for filename in listdir(dataset_path):
         with open(f'{dataset_path}/{filename}', encoding='iso-8859-1') as file:
-            dataset.append(file.read())
-
-    return dataset
+            yield file.read()
 
 
 def extract_from_tag(text: str, tag: str) -> Optional[str]:
