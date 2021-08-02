@@ -1,4 +1,4 @@
-from dataset_parser import load_dataset, extract_from_tag, remove_punctuation, remove_linebreak
+from dataset_parser import load_dataset, extract_from_tag, remove_linebreak, tag_sentences
 from n_grams import get_vocabulary, sum_vocabularies, word_count
 
 if __name__ == '__main__':
@@ -6,7 +6,7 @@ if __name__ == '__main__':
     corpus_vocabulary = {}
     for content in load_dataset(dataset_name):
         text = extract_from_tag(content, 'TEXT')
-        formatted_text = remove_linebreak(remove_punctuation(text))
+        formatted_text = tag_sentences(remove_linebreak(text))
         vocabulary = get_vocabulary(text)
         corpus_vocabulary = sum_vocabularies(corpus_vocabulary, vocabulary)
 

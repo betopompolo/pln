@@ -2,13 +2,21 @@ import re
 from os import listdir
 from typing import Optional, List
 
+sentences_regex = re.compile(r'([A-Z][^\.!?]*[\.!?])', re.M)
+
+
+class Tags:
+    StartOfSentence = '<s>'
+    EndOfSentence = '</s>'
+
 
 def load_dataset(dataset_name: str) -> List[str]:
     dataset_path = f'dataset/{dataset_name}'
 
     for filename in listdir(dataset_path):
-        with open(f'{dataset_path}/{filename}', encoding='iso-8859-1') as file:
-            yield file.read()
+        if filename.endswith('.sgml'):
+            with open(f'{dataset_path}/{filename}', encoding='iso-8859-1') as file:
+                yield file.read()
 
 
 def extract_from_tag(text: str, tag: str) -> Optional[str]:
@@ -20,9 +28,11 @@ def extract_from_tag(text: str, tag: str) -> Optional[str]:
         return search_result.group(1).replace(start_tag, '').replace(end_tag, '')
 
 
-def remove_punctuation(text: str) -> Optional[str]:
-    result = re.sub(r'[^\w\s]', '', text)
-    return "".join(result)
+def tag_sentences(text: str) -> str:
+    sentences = sentences_regex.findall(text)
+    tagged_sentences = [f'{Tags.StartOfSentence} {s.strip()[:-1]} {Tags.EndOfSentence} ' for s in sentences]
+
+    return "".join(tagged_sentences)
 
 
 def remove_linebreak(text: str) -> str:
