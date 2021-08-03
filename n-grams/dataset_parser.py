@@ -54,7 +54,7 @@ def add_unknown_tags(text: str, tags_rate=0.01) -> str:
     unk_indexes: list[int] = []
 
     while len(unk_indexes) < unk_count:
-        unk_index = random.randint(0, split_text_len)
+        unk_index = random.randint(0, split_text_len-1)
         is_tag_index = any(tag == split_text[unk_index] for tag in [Tags.StartOfSentence, Tags.EndOfSentence])
 
         if unk_index not in unk_indexes or is_tag_index is False:

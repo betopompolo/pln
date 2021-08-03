@@ -1,20 +1,24 @@
 from dataset_parser import load_dataset, extract_from_tag, tag_sentences, remove_symbols, \
-    remove_linebreak, Tags
+    remove_linebreak, format_date, add_unknown_tags
 from n_grams import NGramModel
+from progress.bar import Bar
 
 if __name__ == '__main__':
-    dataset_name = 'folha95'
     ngram_model = NGramModel()
 
-    for content in load_dataset(dataset_name):
-        date = extract_from_tag(content, 'DATE')[:6]
+    loading_bar = Bar('Training ngram model', max=365)
+    for content in load_dataset('folha95'):
         text = extract_from_tag(content, 'TEXT')
-        formatted_text = tag_sentences(remove_symbols(remove_linebreak(text))).lower()
+        formatted_text = add_unknown_tags(tag_sentences(remove_symbols(remove_linebreak(text)))).lower()
         ngram_model.update_train(formatted_text)
+        loading_bar.next()
+    loading_bar.finish()
 
-    r1 = ngram_model.perplexity(
-        f'{Tags.StartOfSentence} you better watch the dog that bring the bone {Tags.EndOfSentence}')
-    r2 = ngram_model.perplexity(
-        f'{Tags.StartOfSentence} novo comandante do barco brasil fernando henrique cardoso {Tags.EndOfSentence}')
+    perplexity_results: dict[str, int] = {}
+    for content in load_dataset('folha94'):
+        text = extract_from_tag(content, 'TEXT')
+        date = format_date(extract_from_tag(content, 'DATE')[:6])
+        formatted_text = tag_sentences(remove_symbols(remove_linebreak(text))).lower()
+        perplexity_results[date] = ngram_model.perplexity(formatted_text)
 
-    print(f'from model {r2}\n-------\noutside model {r1}')
+    print(perplexity_results)

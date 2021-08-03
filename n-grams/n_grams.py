@@ -71,7 +71,6 @@ class NGramModel:
 
         total = word_count(vocabulary)
         p_sum = 0
-        w1, w2, w3 = 0.1, 0.2, 0.7
         i = 0
 
         for trigram, bigram, unigram in zip(trigram_count, bigram_count, unigram_count):
@@ -85,10 +84,10 @@ class NGramModel:
                 p2 = 0
             p1 = unigram_count[unigram] / total
 
-            p_sum += np.log(w1 * p1 + w2 * p2 + w3 * p3)
+            p_sum += np.log2(p1 + p2 + p3)
             i += 1
 
-        p_total = np.exp(p_sum)
+        p_total = pow(p_sum, 2)
 
         perplexity = 1 / p_total ** (1 / i)
         return perplexity
