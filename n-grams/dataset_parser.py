@@ -7,9 +7,9 @@ sentences_regex = re.compile(r'([A-Z][^\.!?]*[\.!?])', re.M)
 
 
 class Tags:
-    StartOfSentence = '<s>'
-    EndOfSentence = '</s>'
-    Unknown = '<unk>'
+    StartOfSentence = '<s> <s> <s>'
+    EndOfSentence = '</s> </s> </s>'
+    Unknown = '<unk> <unk> <unk>'
 
 
 def load_dataset(dataset_name: str) -> List[str]:
@@ -32,6 +32,8 @@ def extract_from_tag(text: str, tag: str) -> Optional[str]:
 
 def tag_sentences(text: str) -> str:
     sentences = sentences_regex.findall(text)
+    if len(sentences) == 0:
+        return f'{Tags.StartOfSentence} {text} {Tags.EndOfSentence} '
     tagged_sentences = [f'{Tags.StartOfSentence} {s.strip()[:-1]} {Tags.EndOfSentence} ' for s in sentences]
 
     return "".join(tagged_sentences)
@@ -42,7 +44,7 @@ def remove_linebreak(text: str) -> str:
 
 
 def remove_symbols(text: str) -> str:
-    return text.replace(',', '').replace(';', '')
+    return text.replace(',', '').replace(';', '').replace('"', '')
 
 
 def add_unknown_tags(text: str, tags_rate=0.01) -> str:
@@ -60,3 +62,7 @@ def add_unknown_tags(text: str, tags_rate=0.01) -> str:
             split_text[unk_index] = Tags.Unknown
 
     return " ".join(split_text)
+
+
+def format_date(date: str) -> str:
+    return f'{date[4]}{date[5]}/{date[2]}{date[3]}/19{date[0]}{date[1]}'
